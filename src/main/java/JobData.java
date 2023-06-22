@@ -15,6 +15,10 @@ import java.util.List;
  */
 public class JobData {
 
+
+
+
+
     private static final String DATA_FILE = "src/main/resources/job_data.csv";
     private static boolean isDataLoaded = false;
 
@@ -60,10 +64,8 @@ public class JobData {
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
-     *
      * @param column   Column that should be searched.
      * @param value Value of teh field to search for
      * @return List of all jobs matching the criteria
@@ -76,10 +78,8 @@ public class JobData {
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -98,8 +98,21 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> jobsByValue : allJobs){
+            for (HashMap.Entry<String, String> column: jobsByValue.entrySet()){
+                String valueByColumn = column.getValue();
+                if (valueByColumn.toLowerCase().contains(value.toLowerCase())){
+                    if(!jobs.contains(jobsByValue)){
+                        jobs.add(jobsByValue);
+                    }
+                }
+            }
+
+        }
         // TODO - implement this method
-        return null;
+        return jobs;
     }
 
     /**
